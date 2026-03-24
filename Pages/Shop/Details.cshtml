@@ -1,0 +1,36 @@
+@page "{id:int}"
+@model Pharmacy_order_system.Pages.Shop.DetailsModel
+@{
+    ViewData["Title"] = "Medicine Details";
+}
+@if (Model.Medicine is null)
+{
+    <div class="alert alert-warning">Medicine not found.</div>
+}
+else
+{
+    <div class="card card-body">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h2>@Model.Medicine.Name</h2>
+                <p class="text-muted mb-1">Category: @Model.Medicine.Category?.Name</p>
+                <p class="mb-1">Dosage: @Model.Medicine.Dosage</p>
+                <p class="mb-1">Packaging: @Model.Medicine.Packaging</p>
+                @if (Model.Medicine.RequiresPrescription)
+                {
+                    <span class="badge bg-danger">Prescription Required</span>
+                }
+            </div>
+            <div class="text-end">
+                <h3>?@Model.Medicine.Price</h3>
+                <p>Stock: @Model.Medicine.Stock</p>
+            </div>
+        </div>
+        <form method="post" class="mt-3 d-flex gap-2" asp-page-handler="AddToCart">
+            <input type="hidden" name="id" value="@Model.Medicine.MedicineId" />
+            <input type="number" name="quantity" min="1" max="@Model.Medicine.Stock" value="1" class="form-control" style="max-width:120px" />
+            <button class="btn btn-warning" type="submit" @(Model.Medicine.Stock == 0 ? "disabled" : null)>Add to Cart</button>
+            <a class="btn btn-outline-secondary" asp-page="/Shop/Index">Back to Shop</a>
+        </form>
+    </div>
+}

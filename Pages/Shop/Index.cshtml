@@ -1,0 +1,56 @@
+@page
+@model Pharmacy_order_system.Pages.Shop.IndexModel
+@{
+    ViewData["Title"] = "Medicines";
+}
+@if (TempData["Message"] is string msg && !string.IsNullOrWhiteSpace(msg))
+{
+    <div class="alert alert-warning">@msg</div>
+}
+<div class="shop-toolbar mb-4">
+    <form method="get" class="row g-2">
+        <div class="col-md-5">
+            <input class="form-control" name="Search" value="@Model.Search" placeholder="Search medicines" />
+        </div>
+        <div class="col-md-4">
+            <select class="form-select" name="CategoryId">
+                <option value="">All Categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.CategoryId" selected="@(Model.CategoryId == category.CategoryId)">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-dark w-100" type="submit">Filter</button>
+        </div>
+    </form>
+</div>
+
+<div class="row g-4">
+    @foreach (var medicine in Model.Medicines)
+    {
+        <div class="col-md-4 col-lg-3">
+            <div class="product-card h-100">
+                <div class="small text-muted">@medicine.Category?.Name</div>
+                <h5>@medicine.Name</h5>
+                <p class="mb-1">Dosage: @medicine.Dosage</p>
+                <p class="mb-1">Pack: @medicine.Packaging</p>
+                @if (medicine.RequiresPrescription)
+                {
+                    <span class="badge bg-danger mb-2">Prescription Required</span>
+                }
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                    <span class="fw-bold">?@medicine.Price</span>
+                    <span class="text-muted">Stock: @medicine.Stock</span>
+                </div>
+                <form method="post" asp-page-handler="AddToCart" class="mt-3 d-grid gap-2">
+                    <input type="hidden" name="medicineId" value="@medicine.MedicineId" />
+                    <input type="number" min="1" max="@medicine.Stock" name="quantity" class="form-control" value="1" />
+                    <button class="btn btn-warning" type="submit" @(medicine.Stock == 0 ? "disabled" : null)>Add to Cart</button>
+                    <a class="btn btn-outline-dark" asp-page="/Shop/Details" asp-route-id="@medicine.MedicineId">View Details</a>
+                </form>
+            </div>
+        </div>
+    }
+</div>

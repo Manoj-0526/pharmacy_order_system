@@ -1,0 +1,12 @@
+@page
+@model Pharmacy_order_system.Pages.Admin.DashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<h2 class="mb-4">Admin Dashboard</h2>
+<div class="row g-3">
+    <div class="col-md-3"><div class="stat-card"><h6>Total Users</h6><h3>@Model.TotalUsers</h3></div></div>
+    <div class="col-md-3"><div class="stat-card"><h6>Pending Staff</h6><h3>@Model.PendingStaff</h3></div></div>
+    <div class="col-md-3"><div class="stat-card"><h6>Total Medicines</h6><h3>@Model.TotalMedicines</h3></div></div>
+    <div class="col-md-3"><div class="stat-card"><h6>Total Orders</h6><h3>@Model.TotalOrders</h3></div></div>
+</div>

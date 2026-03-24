@@ -1,0 +1,25 @@
+@page "{id:int}"
+@model Pharmacy_order_system.Pages.Admin.EditMedicineModel
+@{
+    ViewData["Title"] = "Edit Medicine";
+}
+<h2 class="mb-3">Edit Medicine</h2>
+<form method="post" class="card card-body">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row g-2">
+        <div class="col-md-4"><label asp-for="Input.Name"></label><input asp-for="Input.Name" class="form-control" /></div>
+        <div class="col-md-2"><label asp-for="Input.CategoryId"></label><select asp-for="Input.CategoryId" asp-items="Model.CategoryItems" class="form-select"></select></div>
+        <div class="col-md-2"><label asp-for="Input.Dosage"></label><input asp-for="Input.Dosage" class="form-control" /></div>
+        <div class="col-md-2"><label asp-for="Input.Packaging"></label><input asp-for="Input.Packaging" class="form-control" /></div>
+        <div class="col-md-1"><label asp-for="Input.Price"></label><input asp-for="Input.Price" class="form-control" /></div>
+        <div class="col-md-1"><label asp-for="Input.Stock"></label><input asp-for="Input.Stock" class="form-control" /></div>
+    </div>
+    <div class="form-check my-3">
+        <input asp-for="Input.RequiresPrescription" class="form-check-input" />
+        <label asp-for="Input.RequiresPrescription" class="form-check-label"></label>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-warning" type="submit">Save</button>
+        <a class="btn btn-outline-secondary" asp-page="/Admin/Medicines">Back</a>
+    </div>
+</form>

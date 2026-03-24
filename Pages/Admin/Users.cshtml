@@ -1,0 +1,37 @@
+@page
+@model Pharmacy_order_system.Pages.Admin.UsersModel
+@{
+    ViewData["Title"] = "User Management";
+}
+<h2 class="mb-3">User Management</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Approved</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var user in Model.Users)
+    {
+        <tr>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@user.Role</td>
+            <td>@(user.IsApproved ? "Yes" : "No")</td>
+            <td>
+                @if ((user.Role == UserRole.Staff || user.Role == UserRole.Pharmacist) && !user.IsApproved)
+                {
+                    <form method="post" asp-page-handler="Approve">
+                        <input type="hidden" name="id" value="@user.UserId" />
+                        <button class="btn btn-sm btn-success" type="submit">Approve @user.Role</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

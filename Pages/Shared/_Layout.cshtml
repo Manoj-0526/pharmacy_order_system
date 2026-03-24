@@ -1,0 +1,79 @@
+@inject Pharmacy_order_system.Services.CartService CartService
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pharmacy Ordering</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg amazon-nav">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand text-white fw-bold" asp-page="/Index">Pharmacy Mart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var role = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role)?.Value;
+
+                        @if (role == "Customer")
+                        {
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Shop/Index">Medicines</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Orders/History">Orders</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Prescriptions/Upload">Prescriptions</a></li>
+                        }
+                        @if (role == "Admin")
+                        {
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Admin/Dashboard">Dashboard</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Admin/Users">Users</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Admin/Categories">Categories</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Admin/Medicines">Medicines</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Admin/Orders">Orders</a></li>
+                        }
+                        @if (role == "Staff")
+                        {
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Staff/Medicines">Stock Management</a></li>
+                        }
+                        @if (role == "Pharmacist")
+                        {
+                            <li class="nav-item"><a class="nav-link text-white" asp-page="/Pharmacist/Prescriptions">Prescription Review</a></li>
+                        }
+                    }
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <a class="btn btn-sm btn-outline-light" href="/swagger" target="_blank">API</a>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        var isCustomer = User.IsInRole("Customer");
+                        var cartCount = isCustomer ? CartService.GetCart().Sum(x => x.Quantity) : 0;
+
+                        @if (isCustomer)
+                        {
+                            <a class="btn btn-sm btn-outline-light" asp-page="/Cart/Index">Cart (@cartCount)</a>
+                        }
+                        <span class="text-light small">Hello, @User.Identity?.Name</span>
+                        <a class="btn btn-sm btn-warning" asp-page="/Account/Logout">Logout</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-sm btn-outline-light" asp-page="/Account/Login">Login</a>
+                        <a class="btn btn-sm btn-warning" asp-page="/Account/Register">Register</a>
+                    }
+                </div>
+            </div>
+        </nav>
+
+        <main class="container-fluid px-4 py-4">
+            @RenderBody()
+        </main>
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+</html>

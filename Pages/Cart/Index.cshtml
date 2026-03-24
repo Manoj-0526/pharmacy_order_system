@@ -1,0 +1,59 @@
+@page
+@model Pharmacy_order_system.Pages.Cart.IndexModel
+@{
+    ViewData["Title"] = "Cart";
+}
+<h2 class="mb-3">Your Cart</h2>
+@if (!string.IsNullOrWhiteSpace(Model.CartMessage))
+{
+    <div class="alert alert-info">@Model.CartMessage</div>
+}
+@if (Model.Items.Count == 0)
+{
+    <div class="alert alert-info">Your cart is empty. <a asp-page="/Shop/Index">Browse medicines</a>.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Name @if (item.RequiresPrescription) { <span class="badge bg-danger">Rx</span> }</td>
+                    <td>?@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>?@item.LineTotal</td>
+                    <td>
+                        <form method="post" asp-page-handler="Remove">
+                            <input type="hidden" name="medicineId" value="@item.MedicineId" />
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">@Model.ErrorMessage</div>
+    }
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h4>Grand Total: ?@Model.Total</h4>
+        <form method="post" asp-page-handler="Checkout">
+            <button class="btn btn-warning" type="submit">Checkout</button>
+        </form>
+    </div>
+}

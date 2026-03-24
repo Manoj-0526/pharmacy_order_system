@@ -1,0 +1,51 @@
+@page
+@model Pharmacy_order_system.Pages.Admin.MedicinesModel
+@{
+    ViewData["Title"] = "Medicine Management";
+}
+<h2 class="mb-3">Medicine Management</h2>
+<div class="card card-body mb-4">
+    <h5>Add Medicine</h5>
+    <form method="post" asp-page-handler="Create" class="row g-2">
+        <div class="col-md-3"><input asp-for="Input.Name" class="form-control" placeholder="Name" /></div>
+        <div class="col-md-2"><select asp-for="Input.CategoryId" asp-items="Model.CategoryItems" class="form-select"></select></div>
+        <div class="col-md-2"><input asp-for="Input.Dosage" class="form-control" placeholder="Dosage" /></div>
+        <div class="col-md-2"><input asp-for="Input.Packaging" class="form-control" placeholder="Packaging" /></div>
+        <div class="col-md-1"><input asp-for="Input.Price" class="form-control" placeholder="Price" /></div>
+        <div class="col-md-1"><input asp-for="Input.Stock" class="form-control" placeholder="Stock" /></div>
+        <div class="col-md-1 form-check mt-2"><input asp-for="Input.RequiresPrescription" class="form-check-input" /><label asp-for="Input.RequiresPrescription" class="form-check-label">Rx</label></div>
+        <div class="col-12"><button class="btn btn-warning" type="submit">Add</button></div>
+    </form>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Rx</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var medicine in Model.Medicines)
+    {
+        <tr>
+            <td>@medicine.Name</td>
+            <td>@medicine.Category?.Name</td>
+            <td>?@medicine.Price</td>
+            <td>@medicine.Stock</td>
+            <td>@(medicine.RequiresPrescription ? "Yes" : "No")</td>
+            <td class="d-flex gap-2">
+                <a class="btn btn-sm btn-outline-primary" asp-page="/Admin/EditMedicine" asp-route-id="@medicine.MedicineId">Edit</a>
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="id" value="@medicine.MedicineId" />
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

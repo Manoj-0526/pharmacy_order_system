@@ -1,0 +1,39 @@
+@page
+@model Pharmacy_order_system.Pages.Admin.CategoriesModel
+@{
+    ViewData["Title"] = "Category Management";
+}
+<h2 class="mb-3">Category Management</h2>
+<div class="card card-body mb-4">
+    <form method="post" asp-page-handler="Create" class="row g-2">
+        <div class="col-md-8">
+            <input asp-for="CategoryName" class="form-control" placeholder="New category" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+        </div>
+        <div class="col-md-4"><button class="btn btn-warning w-100" type="submit">Add Category</button></div>
+    </form>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Name</th><th>Medicines</th><th></th></tr>
+    </thead>
+    <tbody>
+    @foreach (var category in Model.Categories)
+    {
+        <tr>
+            <td>@category.Name</td>
+            <td>@category.Medicines.Count</td>
+            <td>
+                @if (category.Medicines.Count == 0)
+                {
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="id" value="@category.CategoryId" />
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

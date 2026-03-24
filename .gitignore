@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.cache
+*.pdb
+*.log
+
+# Rider / VS Code
+.idea/
+.vscode/
+
+# Node (if any frontend gets added)
+node_modules/
+
+# Local secrets
+appsettings.Development.json

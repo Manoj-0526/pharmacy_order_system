@@ -1,0 +1,48 @@
+@page
+@model Pharmacy_order_system.Pages.Orders.HistoryModel
+@{
+    ViewData["Title"] = "Order History";
+}
+<h2 class="mb-3">Order History</h2>
+@if (TempData["OrderMessage"] is string orderMessage && !string.IsNullOrWhiteSpace(orderMessage))
+{
+    <div class="alert alert-success">@orderMessage</div>
+}
+@if (Model.Orders.Count == 0)
+{
+    <div class="alert alert-info">No orders placed yet.</div>
+}
+else
+{
+    @foreach (var order in Model.Orders)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h5>Order #@order.OrderId</h5>
+                    <span>@order.Date.ToLocalTime()</span>
+                </div>
+                <table class="table table-sm mt-2">
+                    <thead>
+                        <tr>
+                            <th>Medicine</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.Medicine?.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>?@item.Price</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                <div class="text-end fw-bold">Total: ?@order.TotalAmount</div>
+            </div>
+        </div>
+    }
+}
